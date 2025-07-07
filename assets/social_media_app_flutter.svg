@@ -1,0 +1,6 @@
+<svg width="500" height="120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="500" height="120" fill="#fff0f5"/>
+  <text x="250" y="60" text-anchor="middle" dy=".3em" font-size="36" fill="#000000">
+    Social Media App
+  </text>
+</svg>

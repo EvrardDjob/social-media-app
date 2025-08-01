@@ -29,9 +29,6 @@ Developed a fully functional social media application using Flutter, Dart, and P
   * **Supabase**: Used for file storage (media content like images).
 
 # Screenshots
-<img width="3889" height="2115" alt="1" src="screenshots/feed_screen.png" />
-<img width="3889" height="2115" alt="2" src="screenshots/post_upload.png" />
-<img width="1947" height="1064" alt="3" src="screenshots/profile_view.png" />
 
 # Run on your device:
 * 🔧 Prerequisites  
@@ -43,7 +40,7 @@ Developed a fully functional social media application using Flutter, Dart, and P
 
 * 📥 Step 1: Clone the Repository  
   * Open a terminal and run:
-    * `git clone https://github.com/your-username/social-media-app.git`  
+    * `git clone https://github.com/nikhilesh-7119/Social-Media-App.git`  
     * `cd social-media-app`  
 
 * 📦 Step 2: Install Dependencies  
@@ -63,3 +60,4 @@ Developed a fully functional social media application using Flutter, Dart, and P
 
 # 📃 License  
 * This project is open-source and available under the MIT License.
+

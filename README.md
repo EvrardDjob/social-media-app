@@ -40,7 +40,7 @@ Developed a fully functional social media application using Flutter, Dart, and P
 
 * 📥 Step 1: Clone the Repository  
   * Open a terminal and run:
-    * `git clone https://github.com/nikhilesh-7119/Social-Media-App.git`  
+    * `git clone https://github.com/nikhilesh-7119/Social-Media-App.git](https://github.com/EvrardDjob/social-media-app.git)`  
     * `cd social-media-app`  
 
 * 📦 Step 2: Install Dependencies  
@@ -59,5 +59,6 @@ Developed a fully functional social media application using Flutter, Dart, and P
 
 # 📃 License  
 * This project is open-source and available under the MIT License.
+
 
 

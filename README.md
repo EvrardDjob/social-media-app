@@ -26,7 +26,7 @@ Developed a fully functional social media application using Flutter, Dart, and P
 * **Frontend**: Built with Flutter and Dart, using Provider for state management.
 * **Backend Services**:
   * **Firebase**: Used for authentication and real-time database.
-  * **Supabase**: Used for file storage (media content like images).
+  * **Cloudinary**: Used for file storage (media content like images).
 
 # Screenshots
 
@@ -50,9 +50,8 @@ Developed a fully functional social media application using Flutter, Dart, and P
 * 🔐 Step 3: Set Up Firebase & Supabase  
   * Create a Firebase project and configure Authentication  
   * Download and place the `google-services.json` file in `android/app/`  
-  * Set up a Supabase project at [https://supabase.io](https://supabase.io)  
-  * Configure Supabase keys and storage bucket as needed  
-  * Create a `.env` or constants file to store Supabase credentials
+  * Set up a Cloudinary project  
+ 
 
 * 🛠️ Step 4: Run the App  
   * Use the following command to launch the app:
@@ -60,4 +59,5 @@ Developed a fully functional social media application using Flutter, Dart, and P
 
 # 📃 License  
 * This project is open-source and available under the MIT License.
+
 

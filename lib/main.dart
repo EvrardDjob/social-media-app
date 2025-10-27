@@ -14,19 +14,19 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(
-    url: 'https://redvvzcfbxabthdayijk.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlZHZ2emNmYnhhYnRoZGF5aWprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMzc1MjIsImV4cCI6MjA2NjcxMzUyMn0.3Kr50RKoVC1qZeuzyHezILPuEGjUIK61QotiPFCDHvA',
-  );
+  // await Supabase.initialize(
+  //   url: 'https://xoxyjnwdgdabuszjkfrw.supabase.co',
+  //   anonKey:
+  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhveHlqbndkZ2RhYnVzemprZnJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzOTE1MzQsImV4cCI6MjA3Njk2NzUzNH0.6zboDgMvnDBLeUgIPz1UnRD8CHKrmQJcmUT9EpeqklQ'
+  // );
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: 'AIzaSyAICTURuiilf62olMdRXYCoKAkVpcRMcek',
-        appId: '1:238050457496:web:8d77b609f4add6112ddded',
-        messagingSenderId: '238050457496',
-        projectId: 'social-media-app-us',
-        storageBucket: 'social-media-app-us.firebasestorage.app',
+        apiKey: 'AIzaSyBEu9tOWigKb2wrQsRlXoOxvj4gZLeUBOA',
+        appId: '1:889240070379:web:573548d7426081986c76ae',
+        messagingSenderId: '889240070379',
+        projectId: 'media-app-e5268',
+        storageBucket: 'media-app-e5268.firebasestorage.app',
       ),
     );
   } else {
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Social Media Platform',
+        title: 'Social Media GITFORM',
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: mobileBackgroundColor,

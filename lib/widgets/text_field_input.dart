@@ -5,12 +5,14 @@ class TextFieldInput extends StatelessWidget {
   final bool isPass;
   final String hintText;
   final TextInputType textInputType;
+  final IconData? icon;
   const TextFieldInput({
     super.key,
     required this.textEditingController,
     this.isPass=false,
     required this.hintText,
     required this.textInputType,
+    this.icon
   });
 
   @override
@@ -27,6 +29,7 @@ class TextFieldInput extends StatelessWidget {
         enabledBorder: inputBorder,
         filled: true,
         contentPadding: const EdgeInsets.all(8),
+        prefixIcon: icon != null ? Icon(icon, color: Colors.white) : null,
       ),
       keyboardType: textInputType,
       obscureText: isPass,

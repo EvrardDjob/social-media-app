@@ -17,9 +17,9 @@ class FeedScreen extends StatelessWidget {
           'assets/social_media_app_flutter.svg',
           height: 32,
         ),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.messenger_outline)),
-        ],
+        // actions: [
+        //   IconButton(onPressed: () {}, icon: Icon(Icons.messenger_outline)),
+        // ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('posts').snapshots(),

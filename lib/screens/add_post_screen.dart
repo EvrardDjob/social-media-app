@@ -10,7 +10,9 @@ import 'package:social_media_app/utils/colors.dart';
 import 'package:social_media_app/utils/utils.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({super.key});
+  final VoidCallback? onPostSuccess; //callback optionnel
+  
+  const AddPostScreen({super.key, this.onPostSuccess});
 
   @override
   State<AddPostScreen> createState() => _AddPostScreenState();
@@ -22,7 +24,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
   bool _isLoading = false;
 
   void postImage(String uid, String username, String profileImage) async {
-    // print('postImage called');
     setState(() {
       _isLoading = true;
     });
@@ -34,17 +35,26 @@ class _AddPostScreenState extends State<AddPostScreen> {
         profileImage,
         username,
       );
-      // print(res);
+      
       setState(() {
         _isLoading = false;
       });
+      
       if (res == 'success') {
-        showSnackBar('posted', context);
+        showSnackBar('Posted successfully!', context);
         clearImage();
+        
+        // Appelle le callback si disponible
+        if (widget.onPostSuccess != null) {
+          widget.onPostSuccess!();
+        }
       } else {
         showSnackBar(res, context);
       }
     } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
       showSnackBar(e.toString(), context);
     }
   }
@@ -91,9 +101,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
     );
   }
 
-  void clearImage(){
+  void clearImage() {
     setState(() {
-      _file=null;
+      _file = null;
     });
   }
 
@@ -106,8 +116,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     final User? user = Provider.of<UserProvider>(context).getUser;
-    if(user==null){
-      return const Center(child: CircularProgressIndicator(),);
+    if (user == null) {
+      return const Center(child: CircularProgressIndicator());
     }
     return _file == null
         ? Center(
@@ -145,7 +155,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 _isLoading
                     ? LinearProgressIndicator()
                     : const Padding(padding: EdgeInsets.only(top: 0)),
-                const Divider(color:mobileBackgroundColor,),
+                const Divider(color: mobileBackgroundColor),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,6 +169,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           hintText: 'Write a caption...',
                           border: InputBorder.none,
                         ),
+                        //permet au text d'occuper jusqu'à 8 lignes
                         maxLines: 8,
                       ),
                     ),

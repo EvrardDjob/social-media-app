@@ -6,6 +6,7 @@ import 'package:social_media_app/models/user.dart';
 import 'package:social_media_app/provider/user_provider.dart';
 import 'package:social_media_app/resources/firestore_methods.dart';
 import 'package:social_media_app/screens/comment_screens.dart';
+import 'package:social_media_app/screens/profile_screen.dart'; // ✅ AJOUTÉ
 import 'package:social_media_app/utils/colors.dart';
 import 'package:social_media_app/utils/utils.dart';
 import 'package:social_media_app/widgets/like_animation.dart';
@@ -20,31 +21,71 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
-  int commentLength=0;
+  int commentLength = 0;
+
   @override
   void initState() {
     super.initState();
     getComments();
   }
 
-  void getComments() async{
-    try{
-      QuerySnapshot snap= await FirebaseFirestore.instance.collection('posts').doc(widget.snap['postId']).collection('comments').get();
-      commentLength=snap.docs.length;
-    } catch(e){
+  void getComments() async {
+    try {
+      QuerySnapshot snap = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.snap['postId'])
+          .collection('comments')
+          .get();
+      commentLength = snap.docs.length;
+    } catch (e) {
       showSnackBar(e.toString(), context);
     }
-    setState(() {
-      
-    });
+    setState(() {});
   }
+
+  void showDeleteConfirmation(BuildContext context, String currentUserId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Post'),
+          content: const Text('Are you sure you want to delete this post?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+
+                try {
+                  await FirestoreMethods().deletePost(widget.snap['postId']);
+                  showSnackBar('Post deleted successfully', context);
+                } catch (e) {
+                  showSnackBar('Error deleting post: ${e.toString()}', context);
+                }
+              },
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final User? user = Provider.of<UserProvider>(context).getUser;
-    if(user==null){
-      return const Center(child: CircularProgressIndicator(),);
+    if (user == null) {
+      return const Center(child: CircularProgressIndicator());
     }
-    // print('fdskbdskf ${widget.snap}');
+
     return Container(
       color: mobileBackgroundColor,
       padding: EdgeInsets.symmetric(vertical: 10),
@@ -58,9 +99,20 @@ class _PostCardState extends State<PostCard> {
             ).copyWith(right: 0),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 16,
-                  backgroundImage: NetworkImage(widget.snap['profileImage']),
+                // ✅ MODIFIÉ : Avatar cliquable
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ProfileScreen(uid: widget.snap['uid']),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 16,
+                    backgroundImage: NetworkImage(widget.snap['profileImage']),
+                  ),
                 ),
                 Expanded(
                   child: Padding(
@@ -69,45 +121,58 @@ class _PostCardState extends State<PostCard> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.snap['username'],
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        // ✅ MODIFIÉ : Username cliquable aussi
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfileScreen(uid: widget.snap['uid']),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            widget.snap['username'],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        child: ListView(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shrinkWrap: true,
-                          children: [Text('Delete')]
-                              .map(
-                                (e) => InkWell(
-                                  onTap: () async{
-                                    await FirestoreMethods().deletePost(widget.snap['postId']);
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 12,
-                                      horizontal: 16,
-                                    ),
-                                    child: Text(e.toString()),
-                                  ),
+                widget.snap['uid'] == user.uid
+                    ? IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => Dialog(
+                              child: ListView(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
                                 ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.more_vert),
-                ),
+                                shrinkWrap: true,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      showDeleteConfirmation(context, user.uid);
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                        horizontal: 16,
+                                      ),
+                                      child: const Text('Delete'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.more_vert),
+                      )
+                    : Container(),
               ],
             ),
           ),
@@ -176,22 +241,22 @@ class _PostCardState extends State<PostCard> {
               ),
               IconButton(
                 onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CommentScreens(
-                    snap: widget.snap,
-                  )),
+                  MaterialPageRoute(
+                    builder: (context) => CommentScreens(snap: widget.snap),
+                  ),
                 ),
                 icon: Icon(Icons.comment_outlined),
               ),
               IconButton(onPressed: () {}, icon: Icon(Icons.send)),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.bookmark_border),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   child: Align(
+              //     alignment: Alignment.bottomRight,
+              //     child: IconButton(
+              //       onPressed: () {},
+              //       icon: Icon(Icons.bookmark_border),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           //description and number of comments
@@ -217,9 +282,25 @@ class _PostCardState extends State<PostCard> {
                     text: TextSpan(
                       style: TextStyle(color: primaryColor),
                       children: [
-                        TextSpan(
-                          text: widget.snap['userName'],
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        // ✅ BONUS : Username dans la description cliquable aussi
+                        WidgetSpan(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProfileScreen(uid: widget.snap['uid']),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              widget.snap['username'],
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor,
+                              ),
+                            ),
+                          ),
                         ),
                         TextSpan(text: ' ${widget.snap['description']}'),
                       ],
@@ -227,11 +308,15 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CommentScreens(snap: widget.snap),
+                    ),
+                  ),
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 4),
                     child: Text(
-                      'view all ${commentLength} comments',
+                      'View all $commentLength comments',
                       style: const TextStyle(
                         fontSize: 16,
                         color: secondaryColor,

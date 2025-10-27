@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:social_media_app/resources/storage_methods.dart';
 import 'package:social_media_app/models/user.dart' as model;
 
@@ -30,20 +29,25 @@ class AuthMethods {
     required Uint8List file,
   }) async {
     String res = 'Some error occured';
+
+    if (file == null) {
+      return 'Please select a profile image.';
+    }
+
     try {
-      if (email.isNotEmpty ||
-          password.isNotEmpty ||
-          userName.isNotEmpty ||
-          bio.isNotEmpty ||
-          file != null) {
-        //register the user
+      if (email.isNotEmpty &&
+          password.isNotEmpty &&
+          userName.isNotEmpty &&
+          bio.isNotEmpty) {
+        //register the user and return the UserCredential containing uid
         UserCredential credential = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
 
-        print(credential.user!.uid);
-
+        // print(credential.user!.uid);
+        
+        // stock le profil dans cloudinary et récupère son Url publique
         String photoUrl = await StorageMethods().uploadImagetoStorage(
           "profilepics",
           file,
@@ -67,6 +71,16 @@ class AuthMethods {
             .set(user.toJson());
         res = 'Success';
       }
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'invalid-email') {
+        res = "The email address is badly formatted.";
+      } else if (err.code == 'email-already-in-use') {
+        res = "This email is already registered.";
+      } else if (err.code == 'weak-password') {
+        res = "Password should be at least 6 characters.";
+      } else {
+        res = err.message!;
+      }
     } catch (err) {
       res = err.toString();
     }
@@ -81,7 +95,7 @@ class AuthMethods {
     String res = 'Some Error Occurred';
 
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
+      if (email.isNotEmpty && password.isNotEmpty) {
         await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
@@ -89,6 +103,14 @@ class AuthMethods {
         res = 'Success';
       } else {
         res = 'Please enter all the fields';
+      }
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'user-not-found') {
+        res = "No user found with this email.";
+      } else if (err.code == 'wrong-password') {
+        res = "Incorrect password.";
+      } else {
+        res = err.message!;
       }
     } catch (err) {
       res = err.toString();

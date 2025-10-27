@@ -21,6 +21,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
   }
 
   addData() async{
+    //Accède au UserProvider (votre magasin d'état pour l'utilisateur). L'argument listen: false est crucial car il indique au widget de ne pas se reconstruire si les données du Provider changent.
     UserProvider _userProvider=Provider.of(context,listen: false);
     await _userProvider.refreshUser();
   }

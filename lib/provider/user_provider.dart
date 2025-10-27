@@ -11,6 +11,6 @@ class UserProvider extends ChangeNotifier{
   Future<void> refreshUser() async{
     User user= await _authMethods.getUserDetails();
     _user=user;
-    notifyListeners();
+    notifyListeners(); // déclenche la mise à jour des widgets qui écoute le provider
   }
 }

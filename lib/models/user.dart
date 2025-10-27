@@ -19,6 +19,7 @@ class User {
     required this.following,
   });
 
+  // pour écriture vers FireStore
   Map<String, dynamic> toJson() => {
     'username': username,
     'email': email,
@@ -29,6 +30,8 @@ class User {
     'photoUrl': photoUrl,
   };
 
+
+  // pour la lecture depuis firestore, prend en entré un doc lu de Firestor
   static User fromSnap(DocumentSnapshot snap) {
     var snapshot = (snap.data() as Map<String, dynamic>);
 

@@ -11,14 +11,20 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
-
   int _page = 0;
   late PageController pageController;
+  late List<Widget> homeScreenItems; 
 
   @override
   void initState() {
     super.initState();
-    pageController=PageController();
+    pageController = PageController();
+
+    // On initialise avec le callback
+    homeScreenItems = getHomeScreenItems(() {
+      // Cette fonction sera appelée après un post réussi
+      navigateToFeed();
+    });
   }
 
   @override
@@ -27,20 +33,29 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     pageController.dispose();
   }
 
-  void navigationTapped(int page){
+  void navigationTapped(int page) {
     pageController.jumpToPage(page);
   }
 
-  void onPageChanged(int page){
+  void onPageChanged(int page) {
     setState(() {
-      _page=page;
+      _page = page;
     });
   }
+
+  //Fonction pour naviguer vers le feed
+  void navigateToFeed() {
+    pageController.jumpToPage(0); // Page 0 = FeedScreen
+    setState(() {
+      _page = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        children: homeScreenItems,
+        children: homeScreenItems, // utilise la variable locale
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChanged,

@@ -6,7 +6,7 @@ import 'package:social_media_app/models/user.dart';
 import 'package:social_media_app/provider/user_provider.dart';
 import 'package:social_media_app/resources/firestore_methods.dart';
 import 'package:social_media_app/screens/comment_screens.dart';
-import 'package:social_media_app/screens/profile_screen.dart'; // ✅ AJOUTÉ
+import 'package:social_media_app/screens/profile_screen.dart'; 
 import 'package:social_media_app/utils/colors.dart';
 import 'package:social_media_app/utils/utils.dart';
 import 'package:social_media_app/widgets/like_animation.dart';
@@ -99,7 +99,7 @@ class _PostCardState extends State<PostCard> {
             ).copyWith(right: 0),
             child: Row(
               children: [
-                // ✅ MODIFIÉ : Avatar cliquable
+                //Avatar cliquable
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -121,7 +121,7 @@ class _PostCardState extends State<PostCard> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // ✅ MODIFIÉ : Username cliquable aussi
+                        //Username cliquable aussi
                         InkWell(
                           onTap: () {
                             Navigator.of(context).push(
@@ -188,11 +188,15 @@ class _PostCardState extends State<PostCard> {
                 isLikeAnimating = true;
               });
             },
+
+            // Permet de superposer plusieurs widgets les uns sur les autres (comme des calques Photoshop).
             child: Stack(
               alignment: Alignment.center,
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.35,
+
+                  // S'assure que l'image occupe toute la largeur disponible de l'écran.
                   width: double.infinity,
                   child: Image.network(
                     widget.snap['postUrl'],
@@ -209,6 +213,7 @@ class _PostCardState extends State<PostCard> {
                       size: 120,
                     ),
                     isAnimating: isLikeAnimating,
+                    // La durée de l'animation de grossissement du cœur (400 millisecondes).
                     duration: const Duration(milliseconds: 400),
                     onEnd: () {
                       setState(() {
@@ -224,7 +229,9 @@ class _PostCardState extends State<PostCard> {
           Row(
             children: [
               LikeAnimation(
+                //'animation de base est déclenchée uniquement si l'utilisateur actuel (user.uid) est déjà présent dans la liste des likes
                 isAnimating: widget.snap['likes'].contains(user.uid),
+                //pour lui dire d'utiliser un petit cœur (contrairement au gros cœur flottant du double-tap).
                 smallLike: true,
                 child: IconButton(
                   onPressed: () async {
@@ -247,7 +254,7 @@ class _PostCardState extends State<PostCard> {
                 ),
                 icon: Icon(Icons.comment_outlined),
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.send)),
+              // IconButton(onPressed: () {}, icon: Icon(Icons.send)),
               // Expanded(
               //   child: Align(
               //     alignment: Alignment.bottomRight,
@@ -282,7 +289,7 @@ class _PostCardState extends State<PostCard> {
                     text: TextSpan(
                       style: TextStyle(color: primaryColor),
                       children: [
-                        // ✅ BONUS : Username dans la description cliquable aussi
+                        // Username dans la description cliquable aussi
                         WidgetSpan(
                           child: InkWell(
                             onTap: () {

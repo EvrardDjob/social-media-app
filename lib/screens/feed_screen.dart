@@ -21,11 +21,14 @@ class FeedScreen extends StatelessWidget {
         //   IconButton(onPressed: () {}, icon: Icon(Icons.messenger_outline)),
         // ],
       ),
+
+      // StreamBuilder c'est le widget qui écoute le flux de données et se reconstruit chaque fois qu'une nouvelle donnée arrive
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('posts').snapshots(),
         builder:
             (
               context,
+              //Le snapshot : Représente l'état actuel de la connexion et les données reçues du flux Firestore.
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
             ) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -34,7 +37,7 @@ class FeedScreen extends StatelessWidget {
               return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) => PostCard(
-                  snap: snapshot.data!.docs[index].data() as Map<String,dynamic>,
+                  snap: snapshot.data!.docs[index].data(),
                 ),
               );
             },
